@@ -18,7 +18,11 @@ typedef enum {
     TOKEN_EOF,
     TOKEN_NUMBER,     // e.g., "123", "456"
     TOKEN_OPERATOR,   // e.g., "+", "-"
-    TOKEN_ERROR
+    TOKEN_ERROR,
+    TOKEN_IF,
+    TOKEN_REPEAT,
+    TOKEN_UNTIL,
+    TOKEN_IDENTIFIER
 } TokenType;
 
 /* Error types for lexical analysis
