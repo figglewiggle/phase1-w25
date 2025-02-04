@@ -91,6 +91,42 @@ Token get_next_token(const char *input, int *pos) {
 
     // TODO: Add comment handling here
 
+    //Untested
+    if ((c == '/') && (input[*pos + 1] == '/')){ // Inline comment
+
+        int all_clear = 0;
+        while (all_clear == 0){
+
+            // Get to end of line
+            (*pos)++; // second /
+            do {
+                (*pos)++;
+                c = input[*pos];
+            } while ((c != '\n') && (c != '\0'));
+
+            // Filter out any whitespace on subsequent lines
+            while ((c = input[*pos]) != '\0' && (c == ' ' || c == '\n' || c == '\t')) {
+                if (c == '\n') {
+                current_line++;
+                }
+                (*pos)++;
+            }
+
+            // Did the file end after a comment and blankspace?
+            if (input[*pos] == '\0') {
+                token.type = TOKEN_EOF;
+                strcpy(token.lexeme, "EOF");
+                return token;
+            }
+
+            // Did we hit a new inline comment?
+            if ((c != '/') || (input[*pos + 1] != '/')){ // If not, all clear!
+                all_clear++;
+            }
+        }
+    }
+
+
     // Handle numbers
     if (isdigit(c)) {
         int i = 0;
@@ -107,8 +143,7 @@ Token get_next_token(const char *input, int *pos) {
 
     // TODO: Add keyword and identifier handling here
     // Hint: You'll have to add support for keywords and identifiers, and then string literals
-
-    if (isalpha(c)) {
+     if (isalpha(c)) {
         int i = 0;
         do {
             token.lexeme[i++] = c;
@@ -128,7 +163,22 @@ Token get_next_token(const char *input, int *pos) {
         return token;
     }
 
+
     // TODO: Add string literal handling here
+    if (c == '\"') {
+        int i = 0;
+        char c_prev;
+        do {
+            token.lexeme[i++] = c;
+            (*pos)++;
+            c_prev = c;
+            c = input[*pos];
+        } while ((c != '\"') && (c_prev != '\\') && i < sizeof(token.lexeme) - 1);// edge case: \" escape
+
+        token.lexeme[i] = '\0';
+        token.type = TOKEN_LITERAL;
+        return token;
+    }
 
     // Handle operators
     if (c == '+' || c == '-') {
@@ -161,7 +211,7 @@ Token get_next_token(const char *input, int *pos) {
 // This is a basic lexer that handles numbers (e.g., "123", "456"), basic operators (+ and -), consecutive operator errors, whitespace and newlines, with simple line tracking for error reporting.
 
 int main() {
-    const char *input = "123 + 456 - 789\n1 ++ 2\nint c = 9 \nif ()"; // Test with multi-line input
+    const char *input = "123 + 456 - 789\n1 ++ 2"; // Test with multi-line input
     int position = 0;
     Token token;
 
