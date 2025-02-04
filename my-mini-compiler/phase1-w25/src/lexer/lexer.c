@@ -173,7 +173,7 @@ Token get_next_token(const char *input, int *pos) {
             (*pos)++;
             c_prev = c;
             c = input[*pos];
-        } while ((c != '\"') && (c_prev != '\\') && i < sizeof(token.lexeme) - 1);// edge case: \" escape
+        } while (!((c == '\"') && (c_prev != '\\')) && i < sizeof(token.lexeme) - 1);// edge case: \" escape
 
         token.lexeme[i] = '\0';
         token.type = TOKEN_LITERAL;
