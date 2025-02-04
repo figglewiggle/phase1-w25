@@ -22,6 +22,9 @@ void print_error(ErrorType error, int line, const char *lexeme) {
         case ERROR_CONSECUTIVE_OPERATORS:
             printf("Consecutive operators not allowed\n");
             break;
+        case ERROR_INVALID_OPERATOR:
+            printf("Invalid operator '%s'\n", lexeme);
+            break;
         default:
             printf("Unknown error\n");
     }
@@ -67,6 +70,13 @@ void print_token(Token token) {
     printf(" | Lexeme: '%s' | Line: %d\n",
            token.lexeme, token.line);
 }
+
+
+int is_operator(char c) {
+    return (c == '+' || c == '-' || c == '*' || c == '/' || c == '='|| c == '!'|| 
+            c == '&' || c == '|' || c == '<' || c == '>' || c == '=' );
+}
+
 
 /* Get next token from input */
 Token get_next_token(const char *input, int *pos) {
@@ -127,6 +137,70 @@ Token get_next_token(const char *input, int *pos) {
     }
 
 
+    // Handle operators
+
+    if (is_operator(c)){
+        int i = 0;
+        token.lexeme[i++] = c; //store character in lexeme
+        (*pos)++; // go to next character
+        char c_next = input[*pos]; // get next character
+
+        if (c == '<' || c == '=' || c == '>' || c == '!'){ 
+            if (c_next == '='){ // if next character is =, then it is a 2 character operator
+                token.lexeme[i++] = c_next; // store second character in lexeme
+                (*pos)++; // go to next character
+            }
+        }
+
+        else if (c == '&'){
+            if (c_next == '&'){ // if next character is &, then we have logical AND
+                token.lexeme[i++] = c_next; // store second character in lexeme
+                (*pos)++; // go to next character
+            }
+            else{
+                // if next character is not &, then we have an invalid operator
+                // don't move to next character
+                token.type = TOKEN_ERROR;
+                token.error = ERROR_INVALID_OPERATOR;
+                last_token_type = 'x'; // reset last_token_type
+                token.lexeme[i] = '\0';
+                return token;
+            }
+        }
+
+        else if (c == '|'){
+            if (c_next == '|'){ // if next character is |, then we have logical OR
+                token.lexeme[i++] = c_next; // store second character in lexeme
+                (*pos)++; // go to next character
+            }
+            else{
+                // if next character is not |, then we have an invalid operator
+                // don't move to next character
+                token.type = TOKEN_ERROR;
+                token.error = ERROR_INVALID_OPERATOR;
+                last_token_type = 'x'; // reset last_token_type
+                token.lexeme[i] = '\0';
+                return token;
+            }
+        }
+
+        token.type = TOKEN_OPERATOR;
+        token.lexeme[i] = '\0';
+        
+        if (last_token_type == 'o') {
+            // Check for consecutive operators
+            token.error = ERROR_CONSECUTIVE_OPERATORS;
+            return token;
+        }
+
+        last_token_type = 'o';
+        return token;
+
+    }
+
+    last_token_type = 'x'; // reset last_token_type
+
+
     // Handle numbers
     if (isdigit(c)) {
         int i = 0;
@@ -180,24 +254,6 @@ Token get_next_token(const char *input, int *pos) {
         return token;
     }
 
-    // Handle operators
-    if (c == '+' || c == '-') {
-        if (last_token_type == 'o') {
-            // Check for consecutive operators
-            token.error = ERROR_CONSECUTIVE_OPERATORS;
-            token.lexeme[0] = c;
-            token.lexeme[1] = '\0';
-            (*pos)++;
-            return token;
-        }
-        token.type = TOKEN_OPERATOR;
-        token.lexeme[0] = c;
-        token.lexeme[1] = '\0';
-        last_token_type = 'o';
-        (*pos)++;
-        return token;
-    }
-
     // TODO: Add delimiter handling here
 
     // Handle invalid characters
@@ -211,7 +267,7 @@ Token get_next_token(const char *input, int *pos) {
 // This is a basic lexer that handles numbers (e.g., "123", "456"), basic operators (+ and -), consecutive operator errors, whitespace and newlines, with simple line tracking for error reporting.
 
 int main() {
-    const char *input = "123 + 456 - 789\n1 ++ 2"; // Test with multi-line input
+    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5"; // Test with multi-line input
     int position = 0;
     Token token;
 
