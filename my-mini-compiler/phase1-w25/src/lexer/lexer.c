@@ -276,6 +276,14 @@ Token get_next_token(const char *input, int *pos) {
             (*pos)++;
             c_prev = c;
             c = input[*pos];
+
+            // String doesn't get closed
+            if (c == '\n') or (c == '\0')) {
+                token.type = TOKEN_OPEN_STR;
+                strcpy(token.lexeme, "OPEN_STR");
+                return token;
+            }
+            
         } while (!((c == '\"') && (c_prev != '\\')) && i < sizeof(token.lexeme) - 1);
 
         // Complete the token
