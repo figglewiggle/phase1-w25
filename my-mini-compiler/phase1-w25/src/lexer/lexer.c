@@ -172,6 +172,7 @@ Token get_next_token(const char *input, int *pos) {
             if (c_next == '=') {
                 token.lexeme[i++] = c_next;
                 (*pos)++;
+            }
         }
 
         else if (c == '&'){
@@ -285,12 +286,12 @@ Token get_next_token(const char *input, int *pos) {
     (*pos)++;
     return token;
 }
-}
+
 
 // This is a basic lexer that handles numbers (e.g., "123", "456"), basic operators (+ and -), consecutive operator errors, whitespace and newlines, with simple line tracking for error reporting.
 
 int main() {
-    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5"; // Test with multi-line input
+    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5 << & 3"; // Test with multi-line input
     int position = 0;
     Token token;
 
