@@ -38,7 +38,13 @@
 
 = (Assignment)
 
-### Assignment Operators:
+
+## Literal Handling:
+
+numerical literals already given
+
+" begins string literal token
+" ends string literal token as long as it is not escaped
 
 << (Left Shift)
 
