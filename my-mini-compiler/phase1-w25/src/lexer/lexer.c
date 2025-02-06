@@ -64,6 +64,9 @@ void print_token(Token token) {
         case TOKEN_IDENTIFIER:
             printf("IDENTIFIER");
             break;
+        case TOKEN_DELIMITER:
+            printf("DELIMITER");
+            break;
         default:
             printf("UNKNOWN");
     }
@@ -77,6 +80,10 @@ int is_operator(char c) {
             c == '&' || c == '|' || c == '<' || c == '>' || c == '%'|| c == '=' );
 }
 
+int is_delimiter(char c) {
+    return (c == '(' || c == ')' || c == '{' || c == '}' || c == '['|| c == ']' ||
+            c == ',' || c == ';');
+}
 
 /* Get next token from input */
 Token get_next_token(const char *input, int *pos) {
@@ -278,6 +285,12 @@ Token get_next_token(const char *input, int *pos) {
     }
 
     // TODO: Add delimiter handling here
+    if (is_delimiter(c)) {
+        token.type = TOKEN_DELIMITER;
+        token.lexeme[i++] = c;
+        token.lexeme[i] = '\0';
+        return token;
+    }
 
     // Handle invalid characters
     token.error = ERROR_INVALID_CHAR;

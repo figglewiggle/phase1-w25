@@ -23,7 +23,8 @@ typedef enum {
     TOKEN_REPEAT,
     TOKEN_UNTIL,
     TOKEN_IDENTIFIER,
-    TOKEN_LITERAL
+    TOKEN_LITERAL,
+    TOKEN_DELIMITER
 } TokenType;
 
 /* Error types for lexical analysis
