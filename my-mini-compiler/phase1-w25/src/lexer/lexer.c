@@ -246,22 +246,22 @@ Token get_next_token(const char *input, int *pos) {
 
     // TODO: Add keyword and identifier handling here
     // Hint: You'll have to add support for keywords and identifiers, and then string literals
-     if (isalpha(c)) {
-        int i = 0;
+     if (isalpha(c)) {  // checks if the first letter of the keyword/identifier is a letter (which it should be)
+        int i = 0; 
         do {
             token.lexeme[i++] = c;
             (*pos)++;
             c = input[*pos];
-        } while ((isalnum(c) || c == '_') && i < sizeof(token.lexeme) - 1);
-        token.lexeme[i] = '\0';
-        if (strcmp(token.lexeme, "if") == 0) {
+        } while ((isalnum(c) || c == '_') && i < sizeof(token.lexeme) - 1); // keeps going as long as the next token is a letter or a number or an underscore, and stops at end of token regardless
+        token.lexeme[i] = '\0'; // makes the token into a string by adding \0
+        if (strcmp(token.lexeme, "if") == 0) { // keyword checking is done here
             token.type = TOKEN_IF;
         } else if (strcmp(token.lexeme, "repeat") == 0) {
             token.type = TOKEN_REPEAT;
         } else if (strcmp(token.lexeme, "until") == 0) {
             token.type = TOKEN_UNTIL;
         } else {
-            token.type = TOKEN_IDENTIFIER;
+            token.type = TOKEN_IDENTIFIER; // if it is not a keyword, it is an identifier
         }
         return token;
     }
