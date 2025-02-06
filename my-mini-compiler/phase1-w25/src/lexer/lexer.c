@@ -287,8 +287,9 @@ Token get_next_token(const char *input, int *pos) {
     // TODO: Add delimiter handling here
     if (is_delimiter(c)) {
         token.type = TOKEN_DELIMITER;
-        token.lexeme[i++] = c;
-        token.lexeme[i] = '\0';
+        token.lexeme[0] = c;
+        token.lexeme[1] = '\0';
+        (*pos)++;
         return token;
     }
 
@@ -304,7 +305,7 @@ Token get_next_token(const char *input, int *pos) {
 // This is a basic lexer that handles numbers (e.g., "123", "456"), basic operators (+ and -), consecutive operator errors, whitespace and newlines, with simple line tracking for error reporting.
 
 int main() {
-    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5 << & 3"; // Test with multi-line input
+    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5 << & 3 { 0 + 1; } [1, 2, 3] test();"; // Test with multi-line input
     int position = 0;
     Token token;
 
