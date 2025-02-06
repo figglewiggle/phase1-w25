@@ -285,6 +285,7 @@ Token get_next_token(const char *input, int *pos) {
     (*pos)++;
     return token;
 }
+}
 
 // This is a basic lexer that handles numbers (e.g., "123", "456"), basic operators (+ and -), consecutive operator errors, whitespace and newlines, with simple line tracking for error reporting.
 
