@@ -49,4 +49,4 @@ Numerical literals given in template.
 
 " begins string literal token,
 
-" ends string literal token as long as it is not escaped (\" does not end token)
+" ends string literal token as long as it is not escaped (\\" does not end token)
