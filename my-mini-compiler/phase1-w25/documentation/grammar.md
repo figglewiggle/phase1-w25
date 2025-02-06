@@ -34,6 +34,8 @@
 
 || (Logical OR)
 
+! (Not)
+
 ### Assignment Operators:
 
 = (Assignment)

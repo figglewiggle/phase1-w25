@@ -77,7 +77,7 @@ void print_token(Token token) {
 
 int is_operator(char c) {
     return (c == '+' || c == '-' || c == '*' || c == '/' || c == '='|| c == '!'|| 
-            c == '&' || c == '|' || c == '<' || c == '>' || c == '%'|| c == '=' );
+            c == '&' || c == '|' || c == '<' || c == '>' || c == '%' );
 }
 
 int is_delimiter(char c) {
@@ -278,7 +278,7 @@ Token get_next_token(const char *input, int *pos) {
             c = input[*pos];
 
             // String doesn't get closed
-            if ((c == '\n') or (c == '\0')) {
+            if ((c == '\n') || (c == '\0')) {
                 token.type = ERROR_OPEN_STR;
                 strcpy(token.lexeme, "OPEN_STR");
                 return token;
@@ -313,7 +313,7 @@ Token get_next_token(const char *input, int *pos) {
 // This is a basic lexer that handles numbers (e.g., "123", "456"), basic operators (+ and -), consecutive operator errors, whitespace and newlines, with simple line tracking for error reporting.
 
 int main() {
-    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5 << & 3 { 0 + 1; } [1, 2, 3] test();"; // Test with multi-line input
+    const char *input = "123 + 456 - 789\n1 ++ 2 != 34 && 3 && = 4 &| 5 << & 3 { 0 + 1; } [1, 2, 3] test(); 5!"; // Test with multi-line input
     int position = 0;
     Token token;
 
