@@ -71,3 +71,15 @@ They are similar to literals with two key differences:
 
 2. They become identifiers when following a keyword that requires an identifier.
 
+
+## Delimiters:
+
+List of delimiters that the lexer accepts: 
+
+- '('
+- ')'
+- '{'
+- '}'
+- '['
+- ']'
+- ','
