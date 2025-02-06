@@ -74,7 +74,7 @@ void print_token(Token token) {
 
 int is_operator(char c) {
     return (c == '+' || c == '-' || c == '*' || c == '/' || c == '='|| c == '!'|| 
-            c == '&' || c == '|' || c == '<' || c == '>' || c == '=' );
+            c == '&' || c == '|' || c == '<' || c == '>' || c == '%'|| c == '=' );
 }
 
 
@@ -145,11 +145,33 @@ Token get_next_token(const char *input, int *pos) {
         (*pos)++; // go to next character
         char c_next = input[*pos]; // get next character
 
-        if (c == '<' || c == '=' || c == '>' || c == '!'){ 
-            if (c_next == '='){ // if next character is =, then it is a 2 character operator
-                token.lexeme[i++] = c_next; // store second character in lexeme
-                (*pos)++; // go to next character
+        if (c == '<') {
+            // Check for shift operator << or the <= operator
+            if (c_next == '<') {
+                // Detected <<
+                token.lexeme[i++] = c_next;
+                (*pos)++;
+            } else if (c_next == '=') {
+                // Detected <=
+                token.lexeme[i++] = c_next;
+                (*pos)++;
             }
+        } else if (c == '>') {
+            // Check for shift operator >> or the >= operator
+            if (c_next == '>') {
+                // Detected >>
+                token.lexeme[i++] = c_next;
+                (*pos)++;
+            } else if (c_next == '=') {
+                // Detected >=
+                token.lexeme[i++] = c_next;
+                (*pos)++;
+            }
+        } else if (c == '=' || c == '!') {
+            // For = and !, only the equality operator is allowed (== or !=)
+            if (c_next == '=') {
+                token.lexeme[i++] = c_next;
+                (*pos)++;
         }
 
         else if (c == '&'){
