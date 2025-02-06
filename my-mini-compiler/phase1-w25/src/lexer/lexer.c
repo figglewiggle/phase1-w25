@@ -108,7 +108,6 @@ Token get_next_token(const char *input, int *pos) {
 
     // TODO: Add comment handling here
 
-    //Untested
     if ((c == '/') && (input[*pos + 1] == '/')){ // Inline comment
 
         int all_clear = 0;
@@ -268,17 +267,18 @@ Token get_next_token(const char *input, int *pos) {
     }
 
 
-    // TODO: Add string literal handling here
+    // String literal handling
     if (c == '\"') {
         int i = 0;
-        char c_prev;
+        char c_prev; // edge case: \" escape. Need to keep track of previous char
         do {
             token.lexeme[i++] = c;
             (*pos)++;
             c_prev = c;
             c = input[*pos];
-        } while (!((c == '\"') && (c_prev != '\\')) && i < sizeof(token.lexeme) - 1);// edge case: \" escape
+        } while (!((c == '\"') && (c_prev != '\\')) && i < sizeof(token.lexeme) - 1);
 
+        // Complete the token
         token.lexeme[i] = '\0';
         token.type = TOKEN_LITERAL;
         return token;
